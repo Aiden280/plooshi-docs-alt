@@ -4,8 +4,6 @@ import TerserPlugin from "terser-webpack-plugin";
 
 const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname))).slice(3);
 
-console.log(path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname))), __dirname);
-
 webpack({
     mode: 'production',
     entry: path.join(__dirname, './rewrite/index.js'),
@@ -20,5 +18,5 @@ webpack({
         })],
     },
 }, (err, i) =>
-    console.log(!err ? 'Ultraviolet bundled!' : e)
+    !err ? true : console.log(err)
 );
