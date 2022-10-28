@@ -27,7 +27,7 @@ class StyleApi extends EventEmitter {
         this.ctx.override(this.cssStyleProto, 'getPropertyValue', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
 
-            let [ property ] = args;
+            let [property] = args;
 
             const event = new HookEvent({ property }, target, that);
             this.emit('getPropertyValue', event);
@@ -37,7 +37,7 @@ class StyleApi extends EventEmitter {
         });
         this.ctx.override(this.cssStyleProto, 'setProperty', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ property, value ] = args;
+            let [property, value] = args;
 
             const event = new HookEvent({ property, value }, target, that);
             this.emit('setProperty', event);
@@ -55,7 +55,7 @@ class StyleApi extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ value: val }, target, that);
                 this.emit('setCssText', event);
 

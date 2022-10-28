@@ -10,13 +10,13 @@ class LocationApi extends EventEmitter {
         this.workerLocProto = this.WorkerLocation ? this.WorkerLocation.prototype : {};
         this.keys = ['href', 'protocol', 'host', 'hostname', 'port', 'pathname', 'search', 'hash', 'origin'];
         this.HashChangeEvent = this.window.HashChangeEvent || null;
-        this.href = this.WorkerLocation ? ctx.nativeMethods.getOwnPropertyDescriptor(this.workerLocProto, 'href') : 
-        ctx.nativeMethods.getOwnPropertyDescriptor(this.location, 'href');
+        this.href = this.WorkerLocation ? ctx.nativeMethods.getOwnPropertyDescriptor(this.workerLocProto, 'href') :
+            ctx.nativeMethods.getOwnPropertyDescriptor(this.location, 'href');
     };
     overrideWorkerLocation(parse) {
         if (!this.WorkerLocation) return false;
         const uv = this;
-        
+
         for (const key of this.keys) {
             this.ctx.overrideDescriptor(this.workerLocProto, key, {
                 get: (target, that) => {
@@ -41,7 +41,7 @@ class LocationApi extends EventEmitter {
                     )[key];
                 },
                 set: key !== 'origin' ? function (val) {
-                    switch(key) {
+                    switch (key) {
                         case 'href':
                             that.location.href = wrap(val);
                             break;
@@ -57,7 +57,7 @@ class LocationApi extends EventEmitter {
                 configurable: false,
                 enumerable: true,
             });
-        };  
+        };
 
         if ('reload' in this.location) {
             this.ctx.nativeMethods.defineProperty(emulation, 'reload', {
@@ -74,8 +74,8 @@ class LocationApi extends EventEmitter {
                 value: this.ctx.wrap(this.location, 'assign', (target, that, args) => {
                     if (!args.length || that !== emulation) target.call(that);
                     that = this.location;
-                    let [ input ] = args;
-                    
+                    let [input] = args;
+
                     const url = new URL(input, emulation.href);
                     return target.call(that === emulation ? this.location : that, wrap(url.href));
                 }),
@@ -89,8 +89,8 @@ class LocationApi extends EventEmitter {
                 value: this.ctx.wrap(this.location, 'assign', (target, that, args) => {
                     if (!args.length || that !== emulation) target.call(that);
                     that = this.location;
-                    let [ input ] = args;
-                    
+                    let [input] = args;
+
                     const url = new URL(input, emulation.href);
                     return target.call(that === emulation ? this.location : that, wrap(url.href));
                 }),
@@ -98,7 +98,7 @@ class LocationApi extends EventEmitter {
                 enumerable: true,
             });
         };
-        
+
         if ('ancestorOrigins' in this.location) {
             this.ctx.nativeMethods.defineProperty(emulation, 'ancestorOrigins', {
                 get() {
@@ -110,7 +110,7 @@ class LocationApi extends EventEmitter {
                 enumerable: true,
             });
         };
-        
+
 
         this.ctx.nativeMethods.defineProperty(emulation, 'toString', {
             value: this.ctx.wrap(this.location, 'toString', () => {
@@ -124,11 +124,11 @@ class LocationApi extends EventEmitter {
             value: () => emulation.href,
             writable: false,
             enumerable: false,
-        }); 
+        });
 
         if (this.ctx.window.Location) this.ctx.nativeMethods.setPrototypeOf(emulation, this.ctx.window.Location.prototype);
 
-        return emulation;   
+        return emulation;
     };
 };
 

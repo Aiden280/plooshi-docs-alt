@@ -30,7 +30,7 @@ class Fetch extends EventEmitter {
         this.ctx.override(this.window, 'fetch', (target, that, args) => {
             if (!args.length || args[0] instanceof this.Request) return target.apply(that, args);
 
-            let [ input, options = {} ] = args;
+            let [input, options = {}] = args;
             const event = new HookEvent({ input, options }, target, that);
 
             this.emit('request', event);
@@ -42,7 +42,7 @@ class Fetch extends EventEmitter {
         this.ctx.override(this.window, 'Request', (target, that, args) => {
             if (!args.length) return new target(...args);
 
-            let [ input, options = {} ] = args;
+            let [input, options = {}] = args;
             const event = new HookEvent({ input, options }, target);
 
             this.emit('request', event);
@@ -78,7 +78,7 @@ class Fetch extends EventEmitter {
     };
     overrideHeaders() {
         if (!this.Headers) return false;
-        
+
         this.ctx.overrideDescriptor(this.reqProto, 'headers', {
             get: (target, that) => {
                 const event = new HookEvent({ value: target.call(that) }, target, that);
@@ -87,7 +87,7 @@ class Fetch extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
 
                 return event.data.value;
-            },  
+            },
         });
 
         this.ctx.overrideDescriptor(this.resProto, 'headers', {
@@ -98,10 +98,10 @@ class Fetch extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
 
                 return event.data.value;
-            },  
+            },
         });
 
-        this.ctx.override(this.headersProto, 'get', (target, that, [ name ]) => {
+        this.ctx.override(this.headersProto, 'get', (target, that, [name]) => {
             if (!name) return target.call(that);
             const event = new HookEvent({ name, value: target.call(that, name) }, target, that);
 
@@ -114,7 +114,7 @@ class Fetch extends EventEmitter {
         this.ctx.override(this.headersProto, 'set', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
 
-            let [ name, value ] = args;
+            let [name, value] = args;
             const event = new HookEvent({ name, value }, target, that);
 
             this.emit('setHeader', event);
@@ -125,7 +125,7 @@ class Fetch extends EventEmitter {
 
         this.ctx.override(this.headersProto, 'has', (target, that, args) => {
             if (!args.length) return target.call(that);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name, value: target.call(that, name) }, target, that);
 
@@ -138,7 +138,7 @@ class Fetch extends EventEmitter {
         this.ctx.override(this.headersProto, 'append', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
 
-            let [ name, value ] = args;
+            let [name, value] = args;
             const event = new HookEvent({ name, value }, target, that);
 
             this.emit('appendHeader', event);
@@ -150,7 +150,7 @@ class Fetch extends EventEmitter {
         this.ctx.override(this.headersProto, 'delete', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
 
-            let [ name ] = args;
+            let [name] = args;
             const event = new HookEvent({ name }, target, that);
 
             this.emit('deleteHeader', event);

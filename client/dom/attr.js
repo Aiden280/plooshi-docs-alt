@@ -28,7 +28,7 @@ class AttrApi extends EventEmitter {
                 return event.data.value;
             },
         });
-        
+
         this.ctx.overrideDescriptor(this.attrProto, 'value', {
             get: (target, that) => {
                 const event = new HookEvent({ name: this.name.get.call(that), value: target.call(that) }, target, that);
@@ -37,7 +37,7 @@ class AttrApi extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ name: this.name.get.call(that), value: val }, target, that);
                 this.emit('setValue', event);
 
@@ -49,7 +49,7 @@ class AttrApi extends EventEmitter {
     overrideItemMethods() {
         this.ctx.override(this.attrProto, 'getNamedItem', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, that);
             this.emit('getNamedItem', event);
@@ -59,7 +59,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'setNamedItem', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ name, value ] = args;
+            let [name, value] = args;
 
             const event = new HookEvent({ name, value }, target, that);
             this.emit('setNamedItem', event);
@@ -69,7 +69,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'removeNamedItem', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, that);
             this.emit('removeNamedItem', event);
@@ -79,7 +79,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'item', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ index ] = args;
+            let [index] = args;
 
             const event = new HookEvent({ index }, target, that);
             this.emit('item', event);
@@ -89,7 +89,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'getNamedItemNS', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ namespace, localName ] = args;
+            let [namespace, localName] = args;
 
             const event = new HookEvent({ namespace, localName }, target, that);
             this.emit('getNamedItemNS', event);
@@ -99,7 +99,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'setNamedItemNS', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ attr ] = args;
+            let [attr] = args;
 
             const event = new HookEvent({ attr }, target, that);
             this.emit('setNamedItemNS', event);
@@ -109,7 +109,7 @@ class AttrApi extends EventEmitter {
         });
         this.ctx.override(this.attrProto, 'removeNamedItemNS', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ namespace, localName ] = args;
+            let [namespace, localName] = args;
 
             const event = new HookEvent({ namespace, localName }, target, that);
             this.emit('removeNamedItemNS', event);

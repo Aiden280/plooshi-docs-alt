@@ -16,7 +16,7 @@ class EventSourceApi extends EventEmitter {
     overrideConstruct() {
         this.ctx.override(this.window, 'EventSource', (target, that, args) => {
             if (!args.length) return new target(...args);
-            let [ url, config = {} ] = args;
+            let [url, config = {}] = args;
 
             const event = new HookEvent({ url, config }, target, that);
             this.emit('construct', event);
@@ -34,9 +34,9 @@ class EventSourceApi extends EventEmitter {
     overrideUrl() {
         this.ctx.overrideDescriptor(this.esProto, 'url', {
             get: (target, that) => {
-               const event = new HookEvent({ value: target.call(that) }, target, that);
-               this.emit('url', event);
-               return event.data.value; 
+                const event = new HookEvent({ value: target.call(that) }, target, that);
+                this.emit('url', event);
+                return event.data.value;
             },
         });
     };

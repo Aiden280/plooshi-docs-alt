@@ -78,12 +78,12 @@ class UVClient extends EventEmitter {
         } : {
             attach() {
                 return wrap(fn, this, [...arguments]);
-          },
+            },
         }.attach;
 
         if (!!construct) {
             wrapped.prototype = fn.prototype;
-            wrapped.prototype.constructor = wrapped; 
+            wrapped.prototype.constructor = wrapped;
         };
 
         this.emit('wrap', fn, wrapped, !!construct);

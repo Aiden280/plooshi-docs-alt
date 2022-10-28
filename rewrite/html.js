@@ -29,13 +29,13 @@ class HTML extends EventEmitter {
             const ast = (options.document ? parse : parseFragment)(new String(str).toString());
             this.iterate(ast, fn, options);
             return serialize(ast);
-        } catch(e) {
+        } catch (e) {
             return str;
         };
     };
     iterate(ast, fn, fnOptions) {
         if (!ast) return ast;
-    
+
         if (ast.tagName) {
             const element = new P5Element(ast, false, fnOptions);
             fn(element);
@@ -74,7 +74,7 @@ class HTML extends EventEmitter {
     };
     static parse = parse;
     static parseFragment = parseFragment;
-    static serialize = serialize;  
+    static serialize = serialize;
 };
 
 class P5Element extends EventEmitter {
@@ -134,7 +134,7 @@ class P5Element extends EventEmitter {
         return !this.stream ? serialize(
             {
                 nodeName: '#document-fragment',
-                childNodes: [ this ],
+                childNodes: [this],
             }
         ) : null;
     };
@@ -148,21 +148,21 @@ class P5Element extends EventEmitter {
         iterate(this.node, node => {
             if (node.nodeName === '#text') str += node.value;
         });
-        
+
         return str;
     };
     set textContent(val) {
-        if (!this.stream) this.node.childNodes = [ 
-            { 
-                nodeName: '#text', 
+        if (!this.stream) this.node.childNodes = [
+            {
+                nodeName: '#text',
                 value: val,
-                parentNode: this.node 
+                parentNode: this.node
             }
         ];
     };
     get nodeName() {
         return this.node.nodeName;
-    } 
+    }
     get parentNode() {
         return this.node.parentNode ? new P5Element(this.node.parentNode) : null;
     };
@@ -220,7 +220,7 @@ class TextEvent {
     };
     get nodeName() {
         return this.node.nodeName;
-    } 
+    }
     get parentNode() {
         return this.element;
     };

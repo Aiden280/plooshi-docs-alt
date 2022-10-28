@@ -22,11 +22,11 @@ class MessageApi extends EventEmitter {
             let message;
             let origin;
             let transfer;
-            
+
             if (!this.ctx.worker) {
-                [ message, origin, transfer = [] ] = args;
+                [message, origin, transfer = []] = args;
             } else {
-                [ message, transfer = [] ] = args;
+                [message, transfer = []] = args;
             };
 
             const event = new HookEvent({ message, origin, transfer, worker: this.ctx.worker }, target, that);
@@ -42,11 +42,11 @@ class MessageApi extends EventEmitter {
             let message;
             let origin;
             let transfer;
-            
+
             if (!noOrigin) {
-                [ message, origin, transfer = [] ] = args;
+                [message, origin, transfer = []] = args;
             } else {
-                [ message, transfer = [] ] = args;
+                [message, transfer = []] = args;
                 origin = null;
             };
 
@@ -62,7 +62,7 @@ class MessageApi extends EventEmitter {
             get: (target, that) => {
                 const event = new HookEvent({ value: target.call(that) }, target, that);
                 this.emit('origin', event);
-                
+
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             }
@@ -73,7 +73,7 @@ class MessageApi extends EventEmitter {
             get: (target, that) => {
                 const event = new HookEvent({ value: target.call(that) }, target, that);
                 this.emit('data', event);
-                
+
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             }

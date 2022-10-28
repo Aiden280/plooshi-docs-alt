@@ -21,7 +21,7 @@ class StorageApi extends EventEmitter {
     overrideMethods() {
         this.ctx.override(this.storeProto, 'getItem', (target, that, args) => {
             if (!args.length) return target.apply((this.wrappers.get(that) || that), args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, (this.wrappers.get(that) || that));
             this.emit('getItem', event);
@@ -31,7 +31,7 @@ class StorageApi extends EventEmitter {
         });
         this.ctx.override(this.storeProto, 'setItem', (target, that, args) => {
             if (2 > args.length) return target.apply((this.wrappers.get(that) || that), args);
-            let [ name, value ] = args;
+            let [name, value] = args;
 
             const event = new HookEvent({ name, value }, target, (this.wrappers.get(that) || that));
             this.emit('setItem', event);
@@ -41,7 +41,7 @@ class StorageApi extends EventEmitter {
         });
         this.ctx.override(this.storeProto, 'removeItem', (target, that, args) => {
             if (!args.length) return target.apply((this.wrappers.get(that) || that), args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, (this.wrappers.get(that) || that));
             this.emit('removeItem', event);
@@ -58,7 +58,7 @@ class StorageApi extends EventEmitter {
         });
         this.ctx.override(this.storeProto, 'key', (target, that, args) => {
             if (!args.length) return target.apply((this.wrappers.get(that) || that), args);
-            let [ index ] = args;
+            let [index] = args;
 
             const event = new HookEvent({ index }, target, (this.wrappers.get(that) || that));
             this.emit('key', event);
@@ -72,7 +72,7 @@ class StorageApi extends EventEmitter {
             get: (target, that) => {
                 const event = new HookEvent({ length: target.call((this.wrappers.get(that) || that)) }, target, (this.wrappers.get(that) || that));
                 this.emit('length', event);
-                
+
                 if (event.intercepted) return event.returnValue;
                 return event.data.length;
             },
@@ -112,13 +112,13 @@ class StorageApi extends EventEmitter {
                 return delete storage[event.data.name];
             },
         });
-        
+
         this.wrappers.set(proxy, storage);
         this.ctx.nativeMethods.setPrototypeOf(proxy, this.storeProto);
 
         return proxy;
-    };  
-    
+    };
+
 };
 
 export default StorageApi;

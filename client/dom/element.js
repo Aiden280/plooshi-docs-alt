@@ -23,19 +23,19 @@ class ElementApi extends EventEmitter {
     overrideQuerySelector() {
         this.ctx.override(this.elemProto, 'querySelector', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ selectors ] = args;
+            let [selectors] = args;
 
             const event = new HookEvent({ selectors }, target, that);
             this.emit('querySelector', event);
 
             if (event.intercepted) return event.returnValue;
             return event.target.call(event.that, event.data.selectors);
-        }); 
+        });
     };
     overrideAttribute() {
         this.ctx.override(this.elemProto, 'getAttribute', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, that);
             this.emit('getAttribute', event);
@@ -45,7 +45,7 @@ class ElementApi extends EventEmitter {
         });
         this.ctx.override(this.elemProto, 'setAttribute', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ name, value ] = args;
+            let [name, value] = args;
 
             const event = new HookEvent({ name, value }, target, that);
             this.emit('setAttribute', event);
@@ -55,7 +55,7 @@ class ElementApi extends EventEmitter {
         });
         this.ctx.override(this.elemProto, 'hasAttribute', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, that);
             this.emit('hasAttribute', event);
@@ -65,7 +65,7 @@ class ElementApi extends EventEmitter {
         });
         this.ctx.override(this.elemProto, 'removeAttribute', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name }, target, that);
             this.emit('removeAttribute', event);
@@ -77,7 +77,7 @@ class ElementApi extends EventEmitter {
     overrideAudio() {
         this.ctx.override(this.window, 'Audio', (target, that, args) => {
             if (!args.length) return new target(...args);
-            let [ url ] = args;
+            let [url] = args;
 
             const event = new HookEvent({ url }, target, that);
             this.emit('audio', event);
@@ -95,7 +95,7 @@ class ElementApi extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ value: val }, target, that);
                 this.emit('setInnerHTML', event);
 
@@ -111,7 +111,7 @@ class ElementApi extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ value: val }, target, that);
                 this.emit('setOuterHTML', event);
 
@@ -123,7 +123,7 @@ class ElementApi extends EventEmitter {
     overrideInsertAdjacentHTML() {
         this.ctx.override(this.elemProto, 'insertAdjacentHTML', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ position, html ] = args;
+            let [position, html] = args;
 
             const event = new HookEvent({ position, html }, target, that);
             this.emit('insertAdjacentHTML', event);
@@ -135,7 +135,7 @@ class ElementApi extends EventEmitter {
     overrideInsertAdjacentText() {
         this.ctx.override(this.elemProto, 'insertAdjacentText', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ position, text ] = args;
+            let [position, text] = args;
 
             const event = new HookEvent({ position, text }, target, that);
             this.emit('insertAdjacentText', event);
@@ -157,7 +157,7 @@ class ElementApi extends EventEmitter {
         const proto = element.prototype;
 
         this.ctx.overrideDescriptor(proto, prop, handler);
-        
+
         return true;
     };
 };

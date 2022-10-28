@@ -6,7 +6,7 @@ function attributes(ctx, meta = ctx.meta) {
         if (attr.node.tagName === 'base' && attr.name === 'href' && attr.options.document) {
             meta.base = new URL(attr.value, meta.url);
         };
-        
+
         if (type === 'rewrite' && isUrl(attr.name, attr.tagName)) {
             attr.node.setAttribute(origPrefix + attr.name, attr.value);
             attr.value = ctx.rewriteUrl(attr.value, meta);
@@ -20,14 +20,14 @@ function attributes(ctx, meta = ctx.meta) {
 
         if (type === 'rewrite' && isHtml(attr.name)) {
             attr.node.setAttribute(origPrefix + attr.name, attr.value);
-            attr.value = html.rewrite(attr.value, { 
+            attr.value = html.rewrite(attr.value, {
                 ...meta,
                 document: true,
                 injectHead: attr.options.injectHead || [],
             });
         };
 
-        
+
         if (type === 'rewrite' && isStyle(attr.name)) {
             attr.node.setAttribute(origPrefix + attr.name, attr.value);
             attr.value = ctx.rewriteCSS(attr.value, { context: 'declarationList', });
@@ -61,7 +61,7 @@ function attributes(ctx, meta = ctx.meta) {
 
         };
         */
-    });  
+    });
 
 };
 
@@ -165,7 +165,7 @@ function injectHead(ctx) {
         if (type !== 'rewrite') return false;
         if (element.tagName !== 'head') return false;
         if (!('injectHead' in element.options)) return false;
-        
+
         element.childNodes.unshift(
             ...element.options.injectHead
         );
@@ -238,7 +238,7 @@ function isForbidden(name) {
     return ['http-equiv', 'integrity', 'sandbox', 'nonce', 'crossorigin'].indexOf(name) > -1;
 };
 
-function isHtml(name){
+function isHtml(name) {
     return name === 'srcdoc';
 };
 

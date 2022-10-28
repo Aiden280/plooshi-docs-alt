@@ -42,14 +42,14 @@ function serialize(cookies = [], meta, js) {
         str += cookie.name;
         str += '='
         str += cookie.value;
-    }; 
+    };
     return str;
 };
 
 async function getCookies(db) {
     const now = new Date();
     return (await db.getAll('cookies')).filter(cookie => {
-        
+
         let expired = false;
         if (cookie.set) {
             if (cookie.maxAge) {
@@ -64,7 +64,7 @@ async function getCookies(db) {
             return false;
         };
 
-        return  true;
+        return true;
     });
 };
 
@@ -74,7 +74,7 @@ function setCookies(data, db, meta) {
     const cookies = setCookie(data, {
         decodeValues: false,
     })
-    
+
     for (const cookie of cookies) {
         if (!cookie.domain) cookie.domain = '.' + meta.url.hostname;
         if (!cookie.path) cookie.path = '/';
@@ -84,7 +84,7 @@ function setCookies(data, db, meta) {
         };
 
         db.put('cookies', {
-            ...cookie, 
+            ...cookie,
             id: `${cookie.domain}@${cookie.path}@${cookie.name}`,
             set: new Date(Date.now()),
         });
@@ -92,4 +92,4 @@ function setCookies(data, db, meta) {
     return true;
 };
 
-export { validateCookie, getCookies, setCookies, db , serialize };
+export { validateCookie, getCookies, setCookies, db, serialize };

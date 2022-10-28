@@ -33,7 +33,7 @@ class NodeApi extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ value: val }, target, that);
                 this.emit('setTextContent', event);
 
@@ -43,7 +43,7 @@ class NodeApi extends EventEmitter {
         });
     };
     overrideAppend() {
-        this.ctx.override(this.nodeProto, 'append', (target, that, [ ...nodes ]) => {
+        this.ctx.override(this.nodeProto, 'append', (target, that, [...nodes]) => {
             const event = new HookEvent({ nodes }, target, that);
             this.emit('append', event);
 
@@ -52,7 +52,7 @@ class NodeApi extends EventEmitter {
         });
         this.ctx.override(this.nodeProto, 'appendChild', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ node ] = args;
+            let [node] = args;
 
             const event = new HookEvent({ node }, target, that);
             this.emit('appendChild', event);
@@ -106,7 +106,7 @@ class NodeApi extends EventEmitter {
     overrideCompareDocumentPosit1ion() {
         this.ctx.override(this.nodeProto, 'compareDocumentPosition', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ node ] = args;
+            let [node] = args;
             const event = new HookEvent({ node }, target, that);
 
             if (event.intercepted) return event.returnValue;
@@ -116,6 +116,6 @@ class NodeApi extends EventEmitter {
     overrideChildMethods() {
         this.ctx.override(this.nodeProto, 'removeChild')
     };
-};  
+};
 
 export default NodeApi;

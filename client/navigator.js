@@ -14,7 +14,7 @@ class NavigatorApi extends EventEmitter {
     overrideSendBeacon() {
         this.ctx.override(this.navProto, 'sendBeacon', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ url, data = '' ] = args;
+            let [url, data = ''] = args;
 
             const event = new HookEvent({ url, data }, target, that);
             this.emit('sendBeacon', event);

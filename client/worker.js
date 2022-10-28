@@ -17,19 +17,19 @@ class Workers extends EventEmitter {
     overrideWorker() {
         this.ctx.override(this.window, 'Worker', (target, that, args) => {
             if (!args.length) return new target(...args);
-            let [ url, options = {} ] = args;
+            let [url, options = {}] = args;
 
             const event = new HookEvent({ url, options }, target, that);
             this.emit('worker', event);
 
             if (event.intercepted) return event.returnValue;
-            return new event.target(...[ event.data.url, event.data.options ]);
+            return new event.target(...[event.data.url, event.data.options]);
         }, true);
     };
     overrideAddModule() {
         this.ctx.override(this.workletProto, 'addModule', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ url, options = {} ] = args;
+            let [url, options = {}] = args;
 
             const event = new HookEvent({ url, options }, target, that);
             this.emit('addModule', event);
@@ -41,7 +41,7 @@ class Workers extends EventEmitter {
     overridePostMessage() {
         this.ctx.override(this.workerProto, 'postMessage', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ message, transfer = [] ] = args;
+            let [message, transfer = []] = args;
 
             const event = new HookEvent({ message, transfer }, target, that);
             this.emit('postMessage', event);

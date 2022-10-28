@@ -18,6 +18,6 @@ class HookEvent {
         this.#returnValue = input;
         this.#intercepted = true;
     };
-};  
+};
 
 export default HookEvent;

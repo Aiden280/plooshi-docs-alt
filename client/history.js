@@ -25,7 +25,7 @@ class History extends EventEmitter {
     overridePushState() {
         this.ctx.override(this.historyProto, 'pushState', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ state, title, url = '' ] = args;
+            let [state, title, url = ''] = args;
 
             const event = new HookEvent({ state, title, url }, target, that);
             this.emit('pushState', event);
@@ -37,7 +37,7 @@ class History extends EventEmitter {
     overrideReplaceState() {
         this.ctx.override(this.historyProto, 'replaceState', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ state, title, url = '' ] = args;
+            let [state, title, url = ''] = args;
 
             const event = new HookEvent({ state, title, url }, target, that);
             this.emit('replaceState', event);
@@ -47,7 +47,7 @@ class History extends EventEmitter {
         });
     };
     overrideGo() {
-        this.ctx.override(this.historyProto, 'go', (target, that, [ delta ]) => {
+        this.ctx.override(this.historyProto, 'go', (target, that, [delta]) => {
             const event = new HookEvent({ delta }, target, that);
             this.emit('go', event);
 

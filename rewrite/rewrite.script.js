@@ -11,16 +11,16 @@ function property(ctx) {
                 start: node.property.start,
                 end: node.property.start,
             })
-            node.iterateEnd = function() {
+            node.iterateEnd = function () {
                 data.changes.push({
                     node: '))',
                     start: node.property.end,
                     end: node.property.end,
                 });
             };
-    
+
         };
-    
+
         if (!node.computed && node.property.name === 'location' && type === 'rewrite' || node.property.name === '__uv$location' && type === 'source') {
             data.changes.push({
                 start: node.property.start,
@@ -51,7 +51,7 @@ function property(ctx) {
             data.changes.push({
                 start: node.property.start,
                 end: node.property.end,
-                node:'__uv$setSource(__uv).postMessage',
+                node: '__uv$setSource(__uv).postMessage',
             });
         };
 
@@ -65,13 +65,13 @@ function property(ctx) {
         };
 
         if (!node.computed && node.property.name === '__uv$setSource' && type === 'source' && node.parent.type === Syntax.CallExpression) {
-            const { parent, property } = node; 
+            const { parent, property } = node;
             data.changes.push({
                 start: property.start - 1,
                 end: parent.end,
             });
 
-            node.iterateEnd = function() {
+            node.iterateEnd = function () {
                 data.changes.push({
                     start: property.start,
                     end: parent.end,
@@ -117,15 +117,15 @@ function wrapEval(ctx) {
         if (!node.arguments.length) return false;
         if (node.callee.type !== 'Identifier') return false;
         if (node.callee.name !== 'eval') return false;
-        
-        const [ script ] = node.arguments;
-    
+
+        const [script] = node.arguments;
+
         data.changes.push({
             node: '__uv.js.rewrite(',
             start: script.start,
             end: script.start,
         })
-        node.iterateEnd = function() {
+        node.iterateEnd = function () {
             data.changes.push({
                 node: ')',
                 start: script.end,
@@ -138,8 +138,8 @@ function wrapEval(ctx) {
 function importDeclaration(ctx) {
     const { js } = ctx;
     js.on(Syntax.Literal, (node, data, type) => {
-        if (!((node.parent.type === Syntax.ImportDeclaration || node.parent.type === Syntax.ExportAllDeclaration || node.parent.type === Syntax.ExportNamedDeclaration) 
-        && node.parent.source === node)) return false;
+        if (!((node.parent.type === Syntax.ImportDeclaration || node.parent.type === Syntax.ExportAllDeclaration || node.parent.type === Syntax.ExportNamedDeclaration)
+            && node.parent.source === node)) return false;
 
         data.changes.push({
             start: node.start + 1,
@@ -158,7 +158,7 @@ function dynamicImport(ctx) {
             start: node.source.start,
             end: node.source.start,
         })
-        node.iterateEnd = function() {
+        node.iterateEnd = function () {
             data.changes.push({
                 node: ')',
                 start: node.source.end,
@@ -174,46 +174,46 @@ function unwrap(ctx) {
         if (type !== 'source') return false;
         if (!isWrapped(node.callee)) return false;
 
-        switch(node.callee.property.name) {
+        switch (node.callee.property.name) {
             case '$wrap':
                 if (!node.arguments || node.parent.type !== Syntax.MemberExpression || node.parent.property !== node) return false;
-                const [ property ] = node.arguments;
+                const [property] = node.arguments;
 
                 data.changes.push({
                     start: node.callee.start,
                     end: property.start,
                 });
 
-                node.iterateEnd = function() {
+                node.iterateEnd = function () {
                     data.changes.push({
                         start: node.end - 2,
                         end: node.end,
                     });
-                }; 
+                };
                 break;
             case '$get':
             case 'rewriteUrl':
-                const [ arg ] = node.arguments;
+                const [arg] = node.arguments;
 
                 data.changes.push({
                     start: node.callee.start,
                     end: arg.start,
                 });
 
-                node.iterateEnd = function() {
+                node.iterateEnd = function () {
                     data.changes.push({
                         start: node.end - 1,
                         end: node.end,
                     });
-                }; 
+                };
                 break;
             case 'rewrite':
-                const [ script ] = node.arguments;
+                const [script] = node.arguments;
                 data.changes.push({
                     start: node.callee.start,
                     end: script.start,
                 });
-                node.iterateEnd = function() {
+                node.iterateEnd = function () {
                     data.changes.push({
                         start: node.end - 1,
                         end: node.end,
@@ -234,7 +234,7 @@ function isWrapped(node) {
 
 function computedProperty(parent) {
     if (!parent.computed) return false;
-    const { property: node } = parent; 
+    const { property: node } = parent;
     if (node.type === 'Literal' && !['location', 'top', 'parent']) return false;
     return true;
 };

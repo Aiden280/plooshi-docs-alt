@@ -13,14 +13,14 @@
  */
 
 var $exports = {}
-    
+
 import db from "mime-db";
 
-var extname = function(path = '') {
-    if (!path.includes('.')) return '';
-    const map = path.split('.');
+var extname = function (path = '') {
+  if (!path.includes('.')) return '';
+  const map = path.split('.');
 
-    return '.' + map[map.length - 1];
+  return '.' + map[map.length - 1];
 };
 
 /**
@@ -54,7 +54,7 @@ populateMaps($exports.extensions, $exports.types)
  * @return {boolean|string}
  */
 
-function charset (type) {
+function charset(type) {
   if (!type || typeof type !== 'string') {
     return false
   }
@@ -82,7 +82,7 @@ function charset (type) {
  * @return {boolean|string}
  */
 
-function contentType (str) {
+function contentType(str) {
   // TODO: should this even be in this module?
   if (!str || typeof str !== 'string') {
     return false
@@ -112,7 +112,7 @@ function contentType (str) {
  * @return {boolean|string}
  */
 
-function extension (type) {
+function extension(type) {
   if (!type || typeof type !== 'string') {
     return false
   }
@@ -137,7 +137,7 @@ function extension (type) {
  * @return {boolean|string}
  */
 
-function lookup (path) {
+function lookup(path) {
   if (!path || typeof path !== 'string') {
     return false
   }
@@ -159,11 +159,11 @@ function lookup (path) {
  * @private
  */
 
-function populateMaps (extensions, types) {
+function populateMaps(extensions, types) {
   // source preference (least -> most)
   var preference = ['nginx', 'apache', undefined, 'iana']
 
-  Object.keys(db).forEach(function forEachMimeType (type) {
+  Object.keys(db).forEach(function forEachMimeType(type) {
     var mime = db[type]
     var exts = mime.extensions
 

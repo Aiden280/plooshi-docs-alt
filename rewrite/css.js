@@ -27,7 +27,7 @@ class CSS extends EventEmitter {
                 this.emit(node.type, node, options, type);
             });
             return this.generate(ast);
-        } catch(e) {
+        } catch (e) {
             return str;
         };
     };

@@ -26,7 +26,7 @@ class DocumentHook extends EventEmitter {
     overrideParseFromString() {
         this.ctx.override(this.domProto, 'parseFromString', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
-            let [ string, type ] = args;
+            let [string, type] = args;
 
             const event = new HookEvent({ string, type }, target, that);
             this.emit('parseFromString', event);
@@ -38,14 +38,14 @@ class DocumentHook extends EventEmitter {
     overrideQuerySelector() {
         this.ctx.override(this.docProto, 'querySelector', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ selectors ] = args;
+            let [selectors] = args;
 
             const event = new HookEvent({ selectors }, target, that);
             this.emit('querySelector', event);
 
             if (event.intercepted) return event.returnValue;
             return event.target.call(event.that, event.data.selectors);
-        }); 
+        });
     };
     overrideDomain() {
         this.ctx.overrideDescriptor(this.docProto, 'domain', {
@@ -56,7 +56,7 @@ class DocumentHook extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ val ]) => {
+            set: (target, that, [val]) => {
                 const event = new HookEvent({ value: val }, target, that);
                 this.emit('setDomain', event);
 
@@ -79,7 +79,7 @@ class DocumentHook extends EventEmitter {
     overrideCreateTreeWalker() {
         this.ctx.override(this.docProto, 'createTreeWalker', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ root, show = 0xFFFFFFFF, filter, expandEntityReferences ] = args;
+            let [root, show = 0xFFFFFFFF, filter, expandEntityReferences] = args;
 
             const event = new HookEvent({ root, show, filter, expandEntityReferences }, target, that);
             this.emit('createTreeWalker', event);
@@ -91,7 +91,7 @@ class DocumentHook extends EventEmitter {
     overrideWrite() {
         this.ctx.override(this.docProto, 'write', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ ...html ] = args;
+            let [...html] = args;
 
             const event = new HookEvent({ html }, target, that);
             this.emit('write', event);
@@ -101,7 +101,7 @@ class DocumentHook extends EventEmitter {
         });
         this.ctx.override(this.docProto, 'writeln', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ ...html ] = args;
+            let [...html] = args;
 
             const event = new HookEvent({ html }, target, that);
             this.emit('writeln', event);
@@ -109,7 +109,7 @@ class DocumentHook extends EventEmitter {
             if (event.intercepted) return event.returnValue;
             return event.target.apply(event.that, event.data.html);
         });
-    };  
+    };
     overrideDocumentURI() {
         this.ctx.overrideDescriptor(this.docProto, 'documentURI', {
             get: (target, that) => {
@@ -152,7 +152,7 @@ class DocumentHook extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ value ]) => {
+            set: (target, that, [value]) => {
                 const event = new HookEvent({ value, }, target, that);
                 this.emit('setCookie', event);
 
@@ -170,7 +170,7 @@ class DocumentHook extends EventEmitter {
                 if (event.intercepted) return event.returnValue;
                 return event.data.value;
             },
-            set: (target, that, [ value ]) => {
+            set: (target, that, [value]) => {
                 const event = new HookEvent({ value, }, target, that);
                 this.emit('setTitle', event);
 

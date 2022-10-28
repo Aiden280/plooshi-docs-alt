@@ -14,11 +14,11 @@ class ObjectHook extends EventEmitter {
     overrideGetPropertyNames() {
         this.ctx.override(this.Object, 'getOwnPropertyNames', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ object ] = args;
+            let [object] = args;
 
-            const event =  new HookEvent({ names: target.call(that, object) }, target, that);
+            const event = new HookEvent({ names: target.call(that, object) }, target, that);
             this.emit('getOwnPropertyNames', event);
- 
+
             if (event.intercepted) return event.returnValue;
             return event.data.names;
         });
@@ -26,11 +26,11 @@ class ObjectHook extends EventEmitter {
     overrideGetOwnPropertyDescriptors() {
         this.ctx.override(this.Object, 'getOwnPropertyDescriptors', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ object ] = args;
+            let [object] = args;
 
-            const event =  new HookEvent({ descriptors: target.call(that, object) }, target, that);
+            const event = new HookEvent({ descriptors: target.call(that, object) }, target, that);
             this.emit('getOwnPropertyDescriptors', event);
- 
+
             if (event.intercepted) return event.returnValue;
             return event.data.descriptors;
         });

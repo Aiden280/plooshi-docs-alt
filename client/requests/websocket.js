@@ -20,9 +20,9 @@ class WebSocketApi extends EventEmitter {
     overrideWebSocket() {
         this.ctx.override(this.window, 'WebSocket', (target, that, args) => {
             if (!args.length) return new target(...args);
-            let [ url, protocols = [] ] = args;
+            let [url, protocols = []] = args;
 
-            if (!this.ctx.nativeMethods.isArray(protocols)) protocols = [ protocols ];
+            if (!this.ctx.nativeMethods.isArray(protocols)) protocols = [protocols];
             const event = new HookEvent({ url, protocols }, target, that);
             this.emit('websocket', event);
 
@@ -38,18 +38,18 @@ class WebSocketApi extends EventEmitter {
     overrideUrl() {
         this.ctx.overrideDescriptor(this.wsProto, 'url', {
             get: (target, that) => {
-               const event = new HookEvent({ value: target.call(that) }, target, that);
-               this.emit('url', event);
-               return event.data.value; 
+                const event = new HookEvent({ value: target.call(that) }, target, that);
+                this.emit('url', event);
+                return event.data.value;
             },
         });
     };
     overrideProtocol() {
         this.ctx.overrideDescriptor(this.wsProto, 'protocol', {
             get: (target, that) => {
-               const event = new HookEvent({ value: target.call(that) }, target, that);
-               this.emit('protocol', event);
-               return event.data.value; 
+                const event = new HookEvent({ value: target.call(that) }, target, that);
+                this.emit('protocol', event);
+                return event.data.value;
             },
         });
     };

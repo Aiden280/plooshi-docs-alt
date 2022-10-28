@@ -27,7 +27,7 @@ class JS extends EventEmitter {
         };
         this.parse = parseScript /*parse*/;
         this.generate = generate;
-    };  
+    };
     rewrite(str, data = {}) {
         return this.recast(str, data, 'rewrite');
     };
@@ -65,7 +65,7 @@ class JS extends EventEmitter {
             };
             output.push(str.slice(slice));
             return output.join('');
-        } catch(e) {
+        } catch (e) {
             return str;
         };
     };
@@ -78,7 +78,7 @@ class JS extends EventEmitter {
             for (const child in node) {
                 if (child === 'parent') continue;
                 if (Array.isArray(node[child])) {
-                    node[child].forEach(entry => { 
+                    node[child].forEach(entry => {
                         if (entry) walk(entry, node, handler)
                     });
                 } else {

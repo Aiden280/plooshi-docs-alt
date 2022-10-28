@@ -55,7 +55,7 @@ export default (function (exports) {
 		throw new Error("Opening paren without closing paren");
 	}
 
-	function tokenizeBy (text, grammar) {
+	function tokenizeBy(text, grammar) {
 		if (!text) {
 			return [];
 		}
@@ -65,7 +65,7 @@ export default (function (exports) {
 		for (var token in grammar) {
 			let pattern = grammar[token];
 
-			for (var i=0; i < strarr.length; i++) { // Don’t cache length as it changes during the loop
+			for (var i = 0; i < strarr.length; i++) { // Don’t cache length as it changes during the loop
 				var str = strarr[i];
 
 				if (typeof str === "string") {
@@ -102,7 +102,7 @@ export default (function (exports) {
 		}
 
 		let offset = 0;
-		for (let i=0; i<strarr.length; i++) {
+		for (let i = 0; i < strarr.length; i++) {
 			let token = strarr[i];
 			let length = token.length || token.content.length;
 
@@ -120,7 +120,7 @@ export default (function (exports) {
 		return strarr;
 	}
 
-	function tokenize (selector) {
+	function tokenize(selector) {
 		if (!selector) {
 			return null;
 		}
@@ -131,7 +131,7 @@ export default (function (exports) {
 		let strings = [];
 		// FIXME Does not account for escaped backslashes before a quote
 		selector = selector.replace(/(['"])(\\\1|.)+?\1/g, (str, quote, content, start) => {
-			strings.push({str, start});
+			strings.push({ str, start });
 			return quote + "§".repeat(content.length) + quote;
 		});
 
@@ -139,7 +139,7 @@ export default (function (exports) {
 		let parens = [], offset = 0, start;
 		while ((start = selector.indexOf("(", offset)) > -1) {
 			let str = gobbleParens(selector, start);
-			parens.push({str, start});
+			parens.push({ str, start });
 			selector = selector.substring(0, start) + "(" + "¶".repeat(str.length - 2) + ")" + selector.substring(start + str.length);
 			offset = start + str.length;
 		}
@@ -174,17 +174,17 @@ export default (function (exports) {
 	}
 
 	// Convert a flat list of tokens into a tree of complex & compound selectors
-	function nestTokens(tokens, {list = true} = {}) {
+	function nestTokens(tokens, { list = true } = {}) {
 		if (list && tokens.find(t => t.type === "comma")) {
 			let selectors = [], temp = [];
 
-			for (let i=0; i<tokens.length; i++) {
+			for (let i = 0; i < tokens.length; i++) {
 				if (tokens[i].type === "comma") {
 					if (temp.length === 0) {
 						throw new Error("Incorrect comma at " + i);
 					}
 
-					selectors.push(nestTokens(temp, {list: false}));
+					selectors.push(nestTokens(temp, { list: false }));
 					temp.length = 0;
 				}
 				else {
@@ -196,13 +196,13 @@ export default (function (exports) {
 				throw new Error("Trailing comma");
 			}
 			else {
-				selectors.push(nestTokens(temp, {list: false}));
+				selectors.push(nestTokens(temp, { list: false }));
 			}
 
 			return { type: "list", list: selectors };
 		}
 
-		for (let i=tokens.length - 1; i>=0; i--) {
+		for (let i = tokens.length - 1; i >= 0; i--) {
 			let token = tokens[i];
 
 			if (token.type === "combinator") {
@@ -223,7 +223,7 @@ export default (function (exports) {
 		}
 
 		// If we're here, there are no combinators, so it's just a list
-		return tokens.length === 1? tokens[0] : {
+		return tokens.length === 1 ? tokens[0] : {
 			type: "compound",
 			list: [...tokens] // clone to avoid pointers messing up the AST
 		};
@@ -257,14 +257,14 @@ export default (function (exports) {
 	 * @param options.recursive {Boolean} Whether to parse the arguments of pseudo-classes like :is(), :has() etc. Defaults to true.
 	 * @param options.list {Boolean} Whether this can be a selector list (A, B, C etc). Defaults to true.
 	 */
-	function parse(selector, {recursive = true, list = true} = {}) {
+	function parse(selector, { recursive = true, list = true } = {}) {
 		let tokens = tokenize(selector);
 
 		if (!tokens) {
 			return null;
 		}
 
-		let ast = nestTokens(tokens, {list});
+		let ast = nestTokens(tokens, { list });
 
 		if (recursive) {
 			walk(ast, node => {
@@ -282,7 +282,7 @@ export default (function (exports) {
 							argument = match.groups.subtree;
 						}
 						if (argument) {
-							node.subtree = parse(argument, {recursive: true, list: true});
+							node.subtree = parse(argument, { recursive: true, list: true });
 						}
 					}
 				}
@@ -301,22 +301,22 @@ export default (function (exports) {
 	function maxIndexOf(arr) {
 		let max = arr[0], ret = 0;
 
-		for (let i=0; i<arr.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			if (arr[i] > max) {
 				ret = i;
 				max = arr[i];
 			}
 		}
 
-		return arr.length === 0? -1 : ret;
+		return arr.length === 0 ? -1 : ret;
 	}
 
 	/**
 	 * Calculate specificity of a selector.
 	 * If the selector is a list, the max specificity is returned.
 	 */
-	function specificity(selector, {format = "array"} = {}) {
-		let ast = typeof selector === "object"? selector : parse(selector, {recursive: true});
+	function specificity(selector, { format = "array" } = {}) {
+		let ast = typeof selector === "object" ? selector : parse(selector, { recursive: true });
 
 		if (!ast) {
 			return null;

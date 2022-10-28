@@ -5,11 +5,11 @@ import setCookie from 'set-cookie-parser';
 import { xor, base64, plain } from './codecs.js';
 import mimeTypes from './mime.js';
 import { validateCookie, db, getCookies, setCookies, serialize } from './cookie.js';
-import { attributes, isUrl, isForbidden, isHtml, isSrcset, isStyle, text, injectHead, createInjection } from './rewrite.html.js'; 
+import { attributes, isUrl, isForbidden, isHtml, isSrcset, isStyle, text, injectHead, createInjection } from './rewrite.html.js';
 import { importStyle, url } from './rewrite.css.js';
 //import { call, destructureDeclaration, dynamicImport, getProperty, importDeclaration, setProperty, sourceMethods, wrapEval, wrapIdentifier } from './rewrite.script.js';
 import { dynamicImport, identifier, importDeclaration, property, unwrap, wrapEval } from './rewrite.script.js';
-import { openDB } from 'idb'; 
+import { openDB } from 'idb';
 import parsel from './parsel.js';
 import UVClient from '../client/index.js';
 import Bowser from 'bowser';
@@ -27,7 +27,7 @@ class Ultraviolet {
         this.sourceUrl = options.sourceUrl || this.sourceUrl;
         this.encodeUrl = options.encodeUrl || this.encodeUrl;
         this.decodeUrl = options.decodeUrl || this.decodeUrl;
-        this.vanilla = 'vanilla' in options ? options.vanilla : false; 
+        this.vanilla = 'vanilla' in options ? options.vanilla : false;
         this.meta = options.meta || {};
         this.meta.base ||= undefined;
         this.meta.origin ||= '';
@@ -76,7 +76,7 @@ class Ultraviolet {
 
         try {
             return meta.origin + this.prefix + this.encodeUrl(new URL(str, meta.base).href);
-        } catch(e) {
+        } catch (e) {
             return meta.origin + this.prefix + this.encodeUrl(str);
         };
     };
@@ -87,7 +87,7 @@ class Ultraviolet {
                 this.decodeUrl(str.slice(this.prefix.length + meta.origin.length)),
                 meta.base
             ).href;
-        } catch(e) {
+        } catch (e) {
             return this.decodeUrl(str.slice(this.prefix.length + meta.origin.length));
         };
     };
@@ -99,41 +99,41 @@ class Ultraviolet {
     };
     encodeProtocol(protocol) {
         protocol = protocol.toString();
-    
+
         let result = '';
-        
-        for(let i = 0; i < protocol.length; i++){
+
+        for (let i = 0; i < protocol.length; i++) {
             const char = protocol[i];
-    
-            if(valid_chars.includes(char) && !reserved_chars.includes(char)){
+
+            if (valid_chars.includes(char) && !reserved_chars.includes(char)) {
                 result += char;
-            }else{
+            } else {
                 const code = char.charCodeAt();
                 result += '%' + code.toString(16).padStart(2, 0);
             }
         }
-    
+
         return result;
     };
     decodeProtocol(protocol) {
-        if(typeof protocol != 'string')throw new TypeError('protocol must be a string');
-    
+        if (typeof protocol != 'string') throw new TypeError('protocol must be a string');
+
         let result = '';
-        
-        for(let i = 0; i < protocol.length; i++){
+
+        for (let i = 0; i < protocol.length; i++) {
             const char = protocol[i];
-            
-            if(char == '%'){
+
+            if (char == '%') {
                 const code = parseInt(protocol.slice(i + 1, i + 3), 16);
                 const decoded = String.fromCharCode(code);
-                
+
                 result += decoded;
                 i += 2;
-            }else{
+            } else {
                 result += char;
             }
         }
-    
+
         return result;
     }
     implementUVMiddleware() {

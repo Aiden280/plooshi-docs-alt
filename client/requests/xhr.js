@@ -30,18 +30,18 @@ class Xhr extends EventEmitter {
         this.ctx.override(this.xhrProto, 'open', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
 
-            let [ method, input, async = true, user = null, password = null ] = args;
+            let [method, input, async = true, user = null, password = null] = args;
             const event = new HookEvent({ method, input, async, user, password }, target, that);
 
             this.emit('open', event);
             if (event.intercepted) return event.returnValue;
 
             return event.target.call(
-                event.that, 
-                event.data.method, 
-                event.data.input, 
-                event.data.async, 
-                event.data.user, 
+                event.that,
+                event.data.method,
+                event.data.input,
+                event.data.async,
+                event.data.user,
                 event.data.password
             );
         });
@@ -58,7 +58,7 @@ class Xhr extends EventEmitter {
         });
     };
     overrideSend() {
-        this.ctx.override(this.xhrProto, 'send', (target, that, [ body = null ]) => {
+        this.ctx.override(this.xhrProto, 'send', (target, that, [body = null]) => {
             const event = new HookEvent({ body }, target, that);
 
             this.emit('send', event);
@@ -74,7 +74,7 @@ class Xhr extends EventEmitter {
         this.ctx.override(this.xhrProto, 'setRequestHeader', (target, that, args) => {
             if (2 > args.length) return target.apply(that, args);
 
-            let [ name, value ] = args;
+            let [name, value] = args;
             const event = new HookEvent({ name, value }, target, that);
 
             this.emit('setReqHeader', event);
@@ -96,7 +96,7 @@ class Xhr extends EventEmitter {
     overrideGetResHeader() {
         this.ctx.override(this.xhrProto, 'getResponseHeader', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ name ] = args;
+            let [name] = args;
 
             const event = new HookEvent({ name, value: target.call(that, name) }, target, that);
             if (event.intercepted) return event.returnValue;
@@ -104,6 +104,6 @@ class Xhr extends EventEmitter {
             return event.data.value;
         });
     };
-}; 
+};
 
 export default Xhr

@@ -13,7 +13,7 @@ class URLApi extends EventEmitter {
     overrideObjectURL() {
         this.ctx.override(this.URL, 'createObjectURL', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ object ] = args;
+            let [object] = args;
 
             const event = new HookEvent({ object }, target, that);
             this.emit('createObjectURL', event);
@@ -23,7 +23,7 @@ class URLApi extends EventEmitter {
         });
         this.ctx.override(this.URL, 'revokeObjectURL', (target, that, args) => {
             if (!args.length) return target.apply(that, args);
-            let [ url ] = args;
+            let [url] = args;
 
             const event = new HookEvent({ url }, target, that);
             this.emit('revokeObjectURL', event);
@@ -32,6 +32,6 @@ class URLApi extends EventEmitter {
             return event.target.call(event.that, event.data.url);
         });
     };
-};  
+};
 
 export default URLApi;
