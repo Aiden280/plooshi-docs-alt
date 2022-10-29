@@ -2,7 +2,13 @@ import webpack from "webpack";
 import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
 
-const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)))/*.slice(3)*/;
+let __dirname;
+if (process.platform == "win32") {
+    __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname))).slice(3);
+}
+else {
+    __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+}
 
 webpack({
     mode: 'production',
